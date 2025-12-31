@@ -1,0 +1,16 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: api-test
+
+  cloud:
+    gateway:
+      routes:
+        - id: test-service
+          uri: http://localhost:8080
+          predicates:
+            - Path=/test/**
+          filters:
+            - StripPrefix=1
