@@ -1,11 +1,14 @@
 server:
-  port: 8081
+  port: ${SERVER_PORT:8081}
 
 spring:
+  config:
+    import: optional:file:.env
+
   datasource:
-    url: jdbc:sybase:Tds:yovin:5000/users_db
-    username: sa
-    password: 8427015968
+    url: jdbc:sybase:Tds:${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.sybase.jdbc42.jdbc.SybDriver
 
   jpa:
