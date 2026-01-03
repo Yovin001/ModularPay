@@ -2,6 +2,9 @@ package com.yovin.transactionservice.entity;
 
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
+import com.yovin.transactionservice.entity.TransactionType;
+import com.yovin.transactionservice.entity.TransactionStatus;
+
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -16,10 +19,12 @@ public class Transaction {
     @Column(name = "amount", nullable = false)
     private Double amount;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false, length = 20)
     private TransactionType transactionType;
 
-    @Column(name = "status", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
     private TransactionStatus status;
 
     @Column(name = "created_at")

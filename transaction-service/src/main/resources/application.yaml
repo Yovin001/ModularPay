@@ -1,8 +1,10 @@
 server:
-  port: 8081
+  port: 8082
 
 spring:
-
+  application:
+    name: transaction-service
+    
   datasource:
     url: jdbc:sybase:Tds:yovin:5000/transaction_db
     username: sa
@@ -16,3 +18,10 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SybaseASEDialect
+
+notification-service:
+  url: http://localhost:8081
+
+logging:
+  level:
+    com.yovin.transactionservice: DEBUG

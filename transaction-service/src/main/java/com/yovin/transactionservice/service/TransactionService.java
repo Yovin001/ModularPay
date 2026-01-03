@@ -35,7 +35,7 @@ public class TransactionService {
         transaction.setUserId(request.getUserId());
         transaction.setAmount(request.getAmount());
         transaction.setTransactionType(request.getTransactionType());
-        transaction.setTransactionStatus(TransactionStatus.PENDING);
+        transaction.setStatus(TransactionStatus.PENDING);
         Transaction savedTransaction = transactionRepository.save(transaction);
         log.info("Transaction created with ID: {}", savedTransaction.getId());
 
@@ -43,8 +43,8 @@ public class TransactionService {
             log.info("High value transaction detected for transaction ID: {}", savedTransaction.getId());
             notificationClient.sendHighValueTransactionNotification(
                     savedTransaction.getUserId(),
-                    savedTransaction.getId(),
-                    savedTransaction.getAmount());
+                    savedTransaction.getId(), 
+                    savedTransaction.getAmount().doubleValue());
         }
         return mapToResponse(savedTransaction);
     }
@@ -75,11 +75,11 @@ public class TransactionService {
     }
 
     public TransactionResponse updateTransactionStatus(Long id, UpdateTransactionRequest request) {
-        log.info("Updating transaction status for ID: {} to {}", id, request.getStatus());
+        log.info("Updating transaction status for ID: {} to {}", id, request.getTransactionStatus());
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException(id));
-        TransactionStatus oldStatus = transaction.getTransactionStatus();
-        transaction.setStatus(request.getStatus());
+        TransactionStatus oldStatus = transaction.getStatus();
+        transaction.setStatus(request.getTransactionStatus());
         Transaction updatedTransaction = transactionRepository.save(transaction);
         log.info("Transaction ID: {} status updated from {} to {}", id, oldStatus,
                 updatedTransaction.getStatus());
@@ -89,7 +89,7 @@ public class TransactionService {
             notificationClient.sendTransactionCompleteNotification(
                     updatedTransaction.getUserId(),
                     updatedTransaction.getId(),
-                    updatedTransaction.getAmount());
+                    updatedTransaction.getAmount().doubleValue());
         }
 
         return mapToResponse(updatedTransaction);
@@ -101,9 +101,9 @@ public class TransactionService {
                 .userId(transaction.getUserId())
                 .amount(transaction.getAmount())
                 .transactionType(transaction.getTransactionType())
-                .transactionStatus(transaction.getTransactionStatus())
-                .createdAt(transaction.getCreatedAt())
-                .updatedAt(transaction.getUpdatedAt())
+                .transactionStatus(transaction.getStatus())
+                .createdAt(transaction.getCreatedAt().toString())
+                .updatedAt(transaction.getUpdatedAt().toString())
                 .build();
     }
 }
