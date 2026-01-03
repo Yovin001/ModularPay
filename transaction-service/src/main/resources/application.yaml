@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+
+  datasource:
+    url: jdbc:sybase:Tds:yovin:5000/transaction_db
+    username: sa
+    password: 8427015968
+    driver-class-name: com.sybase.jdbc42.jdbc.SybDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SybaseASEDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SybaseASEDialect
