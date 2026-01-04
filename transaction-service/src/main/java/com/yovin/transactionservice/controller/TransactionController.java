@@ -1,41 +1,49 @@
 package com.yovin.transactionservice.controller;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.*;
-import com.yovin.transactionservice.service.TransactionService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.yovin.transactionservice.dto.request.CreateTransactionRequest;
 import com.yovin.transactionservice.dto.request.UpdateTransactionRequest;
+import com.yovin.transactionservice.dto.response.TransactionResponse;
+import com.yovin.transactionservice.service.TransactionService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.yovin.transactionservice.dto.request.CreateTransactionRequest;
-import com.yovin.transactionservice.dto.response.TransactionResponse;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
-import jakarta.validation.Valid;
-import com.yovin.transactionservice.*;
-
-
-
 
 @RestController
 @RequestMapping("/api/transactions")
 @RequiredArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*" )
+@CrossOrigin(origins = "*")
 public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping
-    public ResponseEntity<TransactionResponse> createTransaction( @Valid @RequestBody CreateTransactionRequest request) {
+    public ResponseEntity<TransactionResponse> createTransaction(@Valid @RequestBody CreateTransactionRequest request) {
         log.info("Received request to create transaction for user ID: {}", request.getUserId());
         TransactionResponse response = transactionService.createTransaction(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-        @GetMapping
-        public ResponseEntity<List<TransactionResponse>> getAllTransactions() {
-            log.info("Received request to fetch all transactions");
-            List<TransactionResponse> responses = transactionService.getAllTransactions();
-            return ResponseEntity.ok(responses);
-        }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionResponse>> getAllTransactions() {
+        log.info("Received request to fetch all transactions");
+        List<TransactionResponse> responses = transactionService.getAllTransactions();
+        return ResponseEntity.ok(responses);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<TransactionResponse> getTransactionById(@PathVariable Long id) {
         log.info("Received request to fetch transaction with ID: {}", id);
